@@ -1,0 +1,58 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+**/graphify-out/
+
+# Raw CCTV source library; only curated demo clips are shipped.
+/public/CCTV/*
+!/public/CCTV/Asep1.mp4
+!/public/CCTV/Constructor.mp4
+!/public/CCTV/asep2.mp4
+!/public/CCTV/car.mp4
+!/public/CCTV/car2.mp4
+!/public/CCTV/cashie.mp4
+!/public/CCTV/construct.mp4
+!/public/CCTV/crowd.mp4
+!/public/CCTV/delivery.mp4
+!/public/CCTV/dish.mp4
+!/public/CCTV/factory_footage.mp4
+!/public/CCTV/id_chat.mp4
+!/public/CCTV/id_group.mp4
+!/public/CCTV/id_loading.mp4
+!/public/CCTV/id_store.mp4
+!/public/CCTV/id_store\ 2.mp4
+!/public/CCTV/lpr-grid.mp4
+!/public/CCTV/lpr-hd.mp4
+!/public/CCTV/package_edit.mp4
+!/public/CCTV/truck_load.mp4
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# AI skills & agent files
+.agents/
+.claude/
+.taste-skill/
+anti-slop/
+AGENTS.md
+CLAUDE.md
+PRODUCT.md
+skills-lock.json

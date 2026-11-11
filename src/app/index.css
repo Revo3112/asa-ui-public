@@ -1,0 +1,390 @@
+@import "tailwindcss";
+@import "@heroui/styles";
+@import "shadcn/tailwind.css";
+@import "@fontsource-variable/inter";
+@import "@fontsource-variable/outfit";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * Token source of truth. HeroUI owns the semantic names (background, surface,
+ * muted, accent, ...). shadcn names that HeroUI lacks are mapped onto them;
+ * `muted` and `accent` mean HeroUI's thing (text grey, brand fill), so shadcn
+ * components using `bg-muted` / `bg-accent` must switch to `bg-default`.
+ * --brand-primary, --brand-accent and their --brand-on-* text colors are set at runtime
+ * from Pengaturan (src/app/state/settings.ts). Navy, data blue and the chart ramp are derived
+ * from primary. Status colors (success, warning, danger) are fixed and never follow the
+ * brand, so red keeps meaning danger whatever the client picks.
+ */
+@theme inline {
+  --font-sans: "Inter Variable", system-ui, sans-serif;
+  --font-display: "Outfit Variable", "Inter Variable", sans-serif;
+
+  --color-ink: var(--brand-ink);
+  --color-navy: var(--brand-navy);
+  --color-brand-accent: var(--brand-accent);
+  --color-brand-accent-foreground: var(--brand-on-accent);
+  --color-tape: var(--tape);
+  --color-tape-hi: var(--tape-hi);
+  --color-tape-silver: var(--tape-silver);
+  --color-rail: var(--rail);
+  --color-rail-foreground: var(--rail-foreground);
+  --color-rail-muted: var(--rail-muted);
+  --color-rail-active: var(--rail-active);
+  --color-rail-seam: var(--rail-seam);
+  --color-raised: var(--raised);
+  --color-rule: var(--rule);
+  --color-control: var(--control);
+  --color-grid: var(--grid);
+  --color-warning-ink: var(--warning-ink);
+  --color-on-ink: var(--on-ink);
+  --color-on-ink-muted: var(--on-ink-muted);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  --color-card: var(--surface);
+  --color-card-foreground: var(--surface-foreground);
+  --color-popover: var(--overlay);
+  --color-popover-foreground: var(--overlay-foreground);
+  --color-primary: var(--accent);
+  --color-primary-foreground: var(--accent-foreground);
+  --color-secondary: var(--default);
+  --color-secondary-foreground: var(--default-foreground);
+  --color-muted-foreground: var(--muted);
+  --color-destructive: var(--danger);
+  --color-input: var(--control);
+  --color-ring: var(--focus);
+}
+
+:root,
+.light,
+[data-theme="light"] {
+  --brand-ink: #0e1d2b;
+  --brand-primary: #205478;
+  --brand-on-primary: #ffffff;
+  --brand-accent: #f1aa2f;
+  --brand-on-accent: var(--brand-ink);
+  /* With the default primary these land on the palette's navy #163551 and teal #277091. */
+  --brand-navy: oklch(from var(--brand-primary) calc(l - 0.1) c h);
+  --brand-data: oklch(from var(--brand-primary) calc(l + 0.09) c calc(h - 9));
+  /* Safety amber: the warning status and the tape mark. Not a brand setting. */
+  --brand-tape: #f1aa2f;
+  --brand-tape-hi: #f1db6a;
+
+  --background: #f3f5f7;
+  --foreground: var(--brand-ink);
+  --surface: #ffffff;
+  --surface-foreground: var(--brand-ink);
+  --surface-secondary: #f7f9fa;
+  --surface-tertiary: #eef2f5;
+  --overlay: #ffffff;
+  --overlay-foreground: var(--brand-ink);
+  --muted: #4f5d6b;
+  --default: #eef2f5;
+  --default-foreground: var(--brand-ink);
+  --accent: var(--brand-primary);
+  --accent-foreground: var(--brand-on-primary);
+  --success: #23824f;
+  --success-foreground: #ffffff;
+  --warning: var(--brand-tape);
+  --warning-foreground: var(--brand-ink);
+  --warning-ink: #8a5a00;
+  --warning-soft-foreground: var(--warning-ink);
+  --danger: #c8352e;
+  --danger-foreground: #ffffff;
+  --border: #dce2e8;
+  --separator: #e9edf1;
+  --focus: var(--brand-primary);
+  --link: var(--brand-primary);
+  --field-background: #ffffff;
+  --field-border: #c3ccd5;
+  --field-placeholder: #5c6977;
+  --segment: #ffffff;
+
+  --raised: #f7f9fa;
+  --rule: #e9edf1;
+  --control: #c3ccd5;
+  --grid: #e3e8ed;
+
+  --rail: var(--brand-navy);
+  --rail-foreground: #c9d6e2;
+  --rail-muted: #93a9be;
+  --rail-active: var(--brand-primary);
+  --rail-seam: color-mix(in oklab, var(--brand-navy) 72%, white);
+
+  --tape: var(--brand-tape);
+  --tape-hi: var(--brand-tape-hi);
+  --tape-silver: #c9d1d9;
+
+  /* Text on the ink camera wall and evidence frame, which stay dark in both themes. */
+  --on-ink: #e6ecf2;
+  --on-ink-muted: #9aabbb;
+
+  --chart-1: var(--brand-data);
+  --chart-2: var(--brand-primary);
+  --chart-3: oklch(from var(--brand-primary) 0.69 calc(c * 0.9) calc(h - 9));
+  --chart-4: var(--brand-navy);
+  --chart-5: oklch(from var(--brand-primary) 0.83 calc(c * 0.45) h);
+}
+
+/* Control-room theme: the same uniform at night. */
+.dark,
+[data-theme="dark"] {
+  --background: #0b1722;
+  --foreground: #e6ecf2;
+  --surface: #13263a;
+  --surface-foreground: #e6ecf2;
+  --surface-secondary: #1a3149;
+  --surface-tertiary: #1f3852;
+  --overlay: #1a3149;
+  --overlay-foreground: #e6ecf2;
+  --muted: #9aabbb;
+  --default: #1f3852;
+  --default-foreground: #e6ecf2;
+  --accent: oklch(from var(--brand-primary) 0.76 calc(c * 0.75) h);
+  --accent-foreground: var(--brand-ink);
+  --success: #4cc384;
+  --success-foreground: var(--brand-ink);
+  --warning-ink: var(--brand-tape);
+  --danger: #f47174;
+  --danger-foreground: var(--brand-ink);
+  --focus: var(--accent);
+  --link: var(--accent);
+  --border: #24405a;
+  --separator: #1f3852;
+  --field-background: #0e1d2b;
+  --field-border: #33536f;
+  --field-placeholder: #8fa1b2;
+  --segment: #24405a;
+
+  --raised: #1a3149;
+  --rule: #1f3852;
+  --control: #33536f;
+  --grid: #22394f;
+
+  --rail: var(--brand-ink);
+  --rail-active: #1f3852;
+  --rail-seam: #24405a;
+
+  --chart-1: oklch(from var(--brand-data) 0.72 calc(c * 0.9) h);
+  --chart-2: oklch(from var(--brand-primary) 0.62 c h);
+  --chart-3: oklch(from var(--brand-primary) 0.58 calc(c * 0.9) calc(h - 9));
+  --chart-4: oklch(from var(--brand-primary) 0.8 calc(c * 0.5) h);
+  --chart-5: oklch(from var(--brand-primary) 0.4 calc(c * 0.8) h);
+}
+
+/* Auth screens: ink buttons and Outfit throughout. */
+.auth {
+  --accent: var(--foreground);
+  --accent-foreground: var(--surface);
+  --accent-hover: color-mix(in oklab, var(--foreground) 88%, var(--surface));
+  font-family: var(--font-display);
+}
+
+@layer base {
+  html {
+    @apply font-sans;
+    font-feature-settings: "tnum" 1;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+  ::selection {
+    background: color-mix(in oklab, var(--accent) 28%, transparent);
+  }
+  :focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+  }
+}
+
+/* Touch screens: every control reaches a 44px tap target; desktop keeps its 36px density. */
+@layer components {
+  @media (pointer: coarse) {
+    .button,
+    .toggle-button,
+    .select__trigger,
+    .search-field__group,
+    .date-input-group,
+    .pagination__link,
+    .close-button,
+    [role="option"],
+    [role="menuitem"] {
+      min-height: 2.75rem;
+    }
+    .button--icon-only,
+    .toggle-button--icon-only,
+    .pagination__link,
+    .close-button {
+      min-width: 2.75rem;
+    }
+  }
+}
+
+@layer utilities {
+  .font-display {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-feature-settings: "tnum" 1;
+  }
+  /* Twill weave of the coverall: the rail's fabric. */
+  .twill {
+    background-color: var(--rail);
+    background-image: repeating-linear-gradient(135deg, rgb(255 255 255 / 0.03) 0 1px, transparent 1px 4px);
+  }
+  .seam {
+    border-color: var(--rail-seam);
+    border-style: dashed;
+  }
+}
+
+/* Reflective tape: amber, silver stripe, amber. The only "needs attention now" mark.
+   Layered so utilities (absolute, inset-x-0, h-1.5) can place and size it. */
+@layer components {
+  .tape {
+    position: relative;
+    height: 6px;
+    overflow: hidden;
+    background: linear-gradient(to bottom, var(--tape) 0 33%, var(--tape-silver) 33% 67%, var(--tape) 67%);
+  }
+  .tape__sweep {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, rgb(255 255 255 / 0.95), transparent);
+    transform: translateX(-100%);
+    animation: tape-sweep 900ms var(--ease-out-quart) forwards;
+  }
+}
+@keyframes tape-sweep {
+  to {
+    transform: translateX(100%);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tape__sweep {
+    display: none;
+  }
+}
+
+/*
+ * HeroUI's drawer slides in with a transition on .drawer__dialog, but React Aria drops
+ * data-entering before the first paint, so the panel would pop in without sliding.
+ * @starting-style gives the transition its starting point. Same offsets as HeroUI's exit.
+ */
+@layer components {
+  .drawer__content--right .drawer__dialog {
+    @starting-style {
+      translate: 100% 0;
+    }
+  }
+  .drawer__content--left .drawer__dialog {
+    @starting-style {
+      translate: -100% 0;
+    }
+  }
+  .drawer__content--bottom .drawer__dialog {
+    @starting-style {
+      translate: 0 100%;
+    }
+  }
+  .drawer__content--top .drawer__dialog {
+    @starting-style {
+      translate: 0 -100%;
+    }
+  }
+}
+
+/* Map markers (features/devices/components/site-map.tsx). Leaflet places the divIcon; these draw it centred on the point. */
+@layer components {
+  .hse-map-site {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.35rem 0.7rem 0.35rem 0.5rem;
+    border-radius: 9999px;
+    background: var(--surface);
+    color: var(--foreground);
+    font: 600 0.8rem/1 var(--font-sans, inherit);
+    white-space: nowrap;
+    box-shadow: 0 4px 14px rgb(0 0 0 / 0.25);
+    cursor: pointer;
+  }
+  .hse-map-site .dot {
+    width: 0.65rem;
+    height: 0.65rem;
+    border-radius: 9999px;
+  }
+  .hse-map-site.danger .dot {
+    box-shadow: 0 0 0 0 var(--danger);
+    animation: hse-map-pulse 1.6s ease-out infinite;
+  }
+  .hse-map-site .count {
+    min-width: 1.25rem;
+    padding: 0.15rem 0.35rem;
+    border-radius: 9999px;
+    background: var(--danger);
+    color: var(--danger-foreground);
+    font-size: 0.7rem;
+    text-align: center;
+  }
+  .hse-map-point {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    display: grid;
+    place-items: center;
+    width: 1.6rem;
+    height: 1.6rem;
+    border-radius: 9999px;
+    border: 2px solid white;
+    color: white;
+    box-shadow: 0 2px 8px rgb(0 0 0 / 0.35);
+    cursor: pointer;
+  }
+  .hse-map-point.big {
+    width: 2.1rem;
+    height: 2.1rem;
+    border-radius: 0.6rem;
+  }
+  .hse-map-point.ok {
+    background: var(--success);
+  }
+  .hse-map-point.warning {
+    background: var(--warning);
+  }
+  .hse-map-point.danger {
+    background: var(--danger);
+  }
+  .hse-map-point.pulse {
+    animation: hse-map-pulse 1.6s ease-out infinite;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hse-map-point.pulse,
+    .hse-map-site.danger .dot {
+      animation: none;
+    }
+  }
+  .leaflet-container {
+    font: inherit;
+  }
+  .leaflet-popup-content-wrapper {
+    border-radius: 0.9rem;
+    background: var(--surface);
+    color: var(--foreground);
+  }
+  .leaflet-popup-tip {
+    background: var(--surface);
+  }
+}
+@keyframes hse-map-pulse {
+  0% {
+    box-shadow: 0 0 0 0 color-mix(in oklab, var(--danger) 70%, transparent);
+  }
+  100% {
+    box-shadow: 0 0 0 14px transparent;
+  }
+}
